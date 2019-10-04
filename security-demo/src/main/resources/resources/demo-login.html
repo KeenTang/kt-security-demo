@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo Login</title>
+</head>
+<body>
+<h1>Demo Login</h1>
+<form action="/authentication/demo/login" method="post">
+    <div>
+        用户名: <input type="text" name="username"/>
+    </div>
+    <div>
+        密码:<input type="password" name="password"/>
+    </div>
+    <div>
+        验证码:<input type="text" name="validateCode"/>
+        <img src="/code/image">
+    </div>
+    <div>
+        <input type="checkbox" name="remember-me" value="true"/>记住我
+    </div>
+    <input type="hidden" value="IMAGE" name="codeType"/>
+    <button type="submit">登录</button>
+</form>
+
+<form action="/authentication/mobile" method="post">
+    <div>
+        手机号: <input type="text" name="mobile" value="123456789"/>
+    </div>
+    <div>
+        验证码:<input type="text" name="validateCode"/>
+        <a href="/code/sms?mobile=123456789">发送验证码</a>
+    </div>
+    <input type="hidden" value="SMS" name="codeType"/>
+    <button type="submit">登录</button>
+</form>
+</body>
+</html>
