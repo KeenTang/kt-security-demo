@@ -3,8 +3,6 @@ package com.k.security.browser.config;
 import com.k.security.browser.authentication.KtAuthenticationFailureHandler;
 import com.k.security.browser.authentication.KtAuthenticationSuccessHandler;
 import com.k.security.browser.service.UsernameDetailService;
-import com.k.security.core.authentication.mobile.SmsCodeAuthenticationFilter;
-import com.k.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.k.security.core.validate.code.ValidateCodeFilter;
 import com.k.security.core.properties.BrowserProperties;
 import com.k.security.core.properties.SecurityProperties;
@@ -49,8 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
-    @Autowired
-    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+    //@Autowired
+    //private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -86,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(userDetailService)
                 .and()
                 .csrf().disable()
-                .apply(smsCodeAuthenticationSecurityConfig);
+        ;
     }
 
     @Bean

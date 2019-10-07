@@ -23,17 +23,5 @@
     <input type="hidden" value="IMAGE" name="codeType"/>
     <button type="submit">登录</button>
 </form>
-
-<form action="/authentication/mobile" method="post">
-    <div>
-        手机号: <input type="text" name="mobile" value="123456789"/>
-    </div>
-    <div>
-        验证码:<input type="text" name="validateCode"/>
-        <a href="/code/sms?mobile=123456789">发送验证码</a>
-    </div>
-    <input type="hidden" value="SMS" name="codeType"/>
-    <button type="submit">登录</button>
-</form>
 </body>
 </html>

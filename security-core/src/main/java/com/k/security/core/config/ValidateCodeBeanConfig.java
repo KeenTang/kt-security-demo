@@ -2,9 +2,6 @@ package com.k.security.core.config;
 
 import com.k.security.core.validate.code.NumberValidateCodeGenerator;
 import com.k.security.core.validate.code.ValidateCodeGenerator;
-import com.k.security.core.validate.code.sms.DefaultSmsCodeSender;
-import com.k.security.core.validate.code.sms.SmsCodeSender;
-import com.k.security.core.validate.code.sms.SmsValidateCodeGenerator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,23 +27,4 @@ public class ValidateCodeBeanConfig {
         return new NumberValidateCodeGenerator();
     }
 
-    /**
-     * 当容器中没有名称为smsCodeGenerator的Bean时，注册SmsValidateCodeGenerator对象
-     * @return
-     */
-    @Bean
-    @ConditionalOnMissingBean(name = "smsCodeGenerator")
-    public ValidateCodeGenerator smsCodeGenerator(){
-        return new SmsValidateCodeGenerator();
-    }
-
-    /**
-     * 当容器中没有SmsCodeSender的实现类时，注册DefaultSmsCodeSender对象
-     * @return
-     */
-    @Bean
-    @ConditionalOnMissingBean(SmsCodeSender.class)
-    public SmsCodeSender smsCodeSender() {
-        return new DefaultSmsCodeSender();
-    }
 }
