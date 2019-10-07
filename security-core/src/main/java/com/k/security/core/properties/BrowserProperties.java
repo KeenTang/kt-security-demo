@@ -18,6 +18,7 @@ public class BrowserProperties {
      */
     private String loginPage = "/test-login.html";
     private String registerPage = "/test-register.html";
+    private String signOutRedirectUrl = "/demo-sign-out.html";
     private String loginProcessingUrl = "/authentication/form";
     private LoginTypeEnum loginType = LoginTypeEnum.JSON;
 }

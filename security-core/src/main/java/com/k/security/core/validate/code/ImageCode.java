@@ -3,6 +3,7 @@ package com.k.security.core.validate.code;
 import lombok.Data;
 
 import java.awt.image.BufferedImage;
+import java.beans.Transient;
 import java.time.LocalDateTime;
 
 /**
@@ -15,7 +16,8 @@ import java.time.LocalDateTime;
  */
 
 public class ImageCode extends ValidateCode {
-    private BufferedImage bufferedImage;
+    private static final long serialVersionUID = -2241752663559006890L;
+    private transient BufferedImage bufferedImage;
 
     public ImageCode(String code, int expireIn, BufferedImage bufferedImage) {
         super(code, expireIn);

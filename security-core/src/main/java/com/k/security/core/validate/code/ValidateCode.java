@@ -2,6 +2,7 @@ package com.k.security.core.validate.code;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -14,7 +15,8 @@ import java.time.LocalDateTime;
  */
 
 @Data
-public class ValidateCode {
+public class ValidateCode implements Serializable {
+    private static final long serialVersionUID = 3029078313635220485L;
     private String code;
     private LocalDateTime expireTime;
 

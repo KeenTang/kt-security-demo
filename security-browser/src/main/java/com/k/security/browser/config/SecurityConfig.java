@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.social.security.SpringSocialConfigurer;
@@ -57,11 +58,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SpringSocialConfigurer ktSocialConfig;
 
+    @Autowired
+    private LogoutSuccessHandler logoutSuccessHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         BrowserProperties browserProperties = securityProperties.getBrowser();
         String loginPage = browserProperties.getLoginPage();
-        String registerPage=browserProperties.getRegisterPage();
+        String registerPage = browserProperties.getRegisterPage();
+        String signOutRedirectUrl = browserProperties.getSignOutRedirectUrl();
         String loginProcessingUrl = browserProperties.getLoginProcessingUrl();
         validateCodeFilter.setAuthenticationFailureHandler(ktAuthenticationFailureHandler);
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -84,8 +89,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(ktAuthenticationFailureHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/authentication/required", loginPage,registerPage,
-                        "/error", "/code/sms", "/code/image", "/authentication/mobile","/user/register")
+                .antMatchers("/authentication/required", loginPage, registerPage,signOutRedirectUrl,
+                        "/error", "/code/sms", "/code/image", "/authentication/mobile", "/user/register")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -95,10 +100,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(3600)
                 .userDetailsService(userDetailService)
                 .and()
+                .logout()
+                .logoutUrl("/signOut")
+                .logoutSuccessHandler(logoutSuccessHandler)
+                .deleteCookies("JSESSIONID")
+                .and()
+                .sessionManagement()
+                .maximumSessions(1)
+                .and()
+                .and()
                 .csrf().disable()
-               // .apply(smsCodeAuthenticationSecurityConfig)
-              //  .and()
-              //  .apply(ktSocialConfig);
+                .apply(smsCodeAuthenticationSecurityConfig)
+                .and()
+                .apply(ktSocialConfig);
         ;
     }
 
