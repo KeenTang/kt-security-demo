@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,7 +22,7 @@ import org.springframework.stereotype.Component;
  * Time: 13:07
  */
 @Component
-public class UsernameDetailService implements UserDetailsService {
+public class UsernameDetailService implements UserDetailsService, SocialUserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -33,7 +36,22 @@ public class UsernameDetailService implements UserDetailsService {
         }
         String password = passwordEncoder.encode(user.getPassword());
         System.out.println("password==" + password);
-        return new org.springframework.security.core.userdetails.User(userName,password,
+        return new org.springframework.security.core.userdetails.User(userName, password,
+                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+    }
+
+    /**
+     * 社交登录用户查询
+     *
+     * @param userId
+     * @return
+     * @throws UsernameNotFoundException
+     */
+    @Override
+    public SocialUserDetails loadUserByUserId(String userId)
+            throws UsernameNotFoundException {
+        String password = passwordEncoder.encode("123456");
+        return new SocialUser(userId, password, true, true, true, true,
                 AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
     }
 }

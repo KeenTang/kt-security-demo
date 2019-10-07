@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
 
@@ -52,10 +53,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
+    @Autowired
+    private SpringSocialConfigurer ktSocialConfig;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         BrowserProperties browserProperties = securityProperties.getBrowser();
         String loginPage = browserProperties.getLoginPage();
+        String registerPage=browserProperties.getRegisterPage();
         String loginProcessingUrl = browserProperties.getLoginProcessingUrl();
         validateCodeFilter.setAuthenticationFailureHandler(ktAuthenticationFailureHandler);
         //validateCodeFilter.afterPropertiesSet();
@@ -74,8 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(ktAuthenticationFailureHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/authentication/required", loginPage,
-                        "/error", "/code/sms", "/code/image", "/authentication/mobile")
+                .antMatchers("/authentication/required", loginPage,registerPage,
+                        "/error", "/code/sms", "/code/image", "/authentication/mobile","/user/register")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -86,7 +91,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(userDetailService)
                 .and()
                 .csrf().disable()
-                .apply(smsCodeAuthenticationSecurityConfig);
+               // .apply(smsCodeAuthenticationSecurityConfig)
+              //  .and()
+              //  .apply(ktSocialConfig);
+        ;
     }
 
     @Bean

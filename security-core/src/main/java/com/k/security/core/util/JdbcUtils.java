@@ -56,7 +56,7 @@ public final class JdbcUtils {
     }
 
     private static User query(String conditions, Object... args) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, JdbcUtils.userName, password);
+        Connection connection = getConnection();
         String sql = "select * from t_user " + conditions;
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         for (int i = 0; i < args.length; i++) {
@@ -64,6 +64,26 @@ public final class JdbcUtils {
         }
         ResultSet resultSet = preparedStatement.executeQuery();
         return createUser(resultSet);
+    }
+
+    private static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, JdbcUtils.userName, password);
+    }
+
+    public static int create(User user) throws SQLException {
+        Connection connection = getConnection();
+        String sql = "insert into t_user(user_name,password,mobile) values(?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, user.getUserName());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setString(3, user.getMobile());
+        preparedStatement.execute();
+        ResultSet keys = preparedStatement.getGeneratedKeys();
+        if (keys.next()) {
+            return keys.getInt(1);
+        } else {
+            throw new RuntimeException("生成ID失败");
+        }
     }
 
     private static User createUser(ResultSet resultSet) throws SQLException {
