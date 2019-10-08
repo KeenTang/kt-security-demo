@@ -5,9 +5,11 @@ import com.k.security.browser.authentication.KtAuthenticationSuccessHandler;
 import com.k.security.browser.service.UsernameDetailService;
 import com.k.security.core.authentication.mobile.SmsCodeAuthenticationFilter;
 import com.k.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import com.k.security.core.service.UsernameDetailService;
 import com.k.security.core.validate.code.ValidateCodeFilter;
 import com.k.security.core.properties.BrowserProperties;
 import com.k.security.core.properties.SecurityProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +34,7 @@ import javax.sql.DataSource;
  * Date: 2019-10-02
  * Time: 18:02
  */
+@Slf4j
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
@@ -63,6 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        log.info("SecurityConfig configure");
         BrowserProperties browserProperties = securityProperties.getBrowser();
         String loginPage = browserProperties.getLoginPage();
         String registerPage = browserProperties.getRegisterPage();

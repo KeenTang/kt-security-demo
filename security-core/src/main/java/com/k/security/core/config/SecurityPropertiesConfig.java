@@ -4,6 +4,8 @@ import com.k.security.core.DefaultLogoutSuccessHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.DelegatingLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
@@ -18,11 +20,16 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  */
 @Configuration
 //@EnableConfigurationProperties(value = SecurityProperties.class)
-@EnableRedisHttpSession
+//@EnableRedisHttpSession
 public class SecurityPropertiesConfig {
     @Bean
     @ConditionalOnMissingBean(value = LogoutSuccessHandler.class)
     public LogoutSuccessHandler logoutSuccessHandler() {
         return new DefaultLogoutSuccessHandler();
+    }
+
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

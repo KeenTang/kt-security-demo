@@ -14,9 +14,14 @@
 
 
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>com.k</groupId>
             <artifactId>security-browser</artifactId>
+            <version>${security.demo.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>com.k</groupId>
+            <artifactId>security-app</artifactId>
             <version>${security.demo.version}</version>
         </dependency>
         <dependency>

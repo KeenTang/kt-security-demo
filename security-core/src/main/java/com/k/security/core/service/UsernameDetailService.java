@@ -1,4 +1,4 @@
-package com.k.security.browser.service;
+package com.k.security.core.service;
 
 import com.k.security.core.model.User;
 import com.k.security.core.util.JdbcUtils;
@@ -52,6 +52,6 @@ public class UsernameDetailService implements UserDetailsService, SocialUserDeta
             throws UsernameNotFoundException {
         String password = passwordEncoder.encode("123456");
         return new SocialUser(userId, password, true, true, true, true,
-                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+                AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
     }
 }
