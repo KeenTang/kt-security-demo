@@ -23,9 +23,6 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 public class KtAuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Override
@@ -40,7 +37,7 @@ public class KtAuthorizationServerConfig extends AuthorizationServerConfigurerAd
         clients.inMemory()
                 .withClient("kt")
                 .authorizedGrantTypes("password", "authorization_code")
-                .secret(passwordEncoder.encode("kt_secret"))
+                .secret("kt_secret")
                 .scopes("all");
     }
 }
