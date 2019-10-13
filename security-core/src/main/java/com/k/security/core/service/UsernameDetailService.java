@@ -37,7 +37,8 @@ public class UsernameDetailService implements UserDetailsService, SocialUserDeta
         String password = passwordEncoder.encode(user.getPassword());
         System.out.println("password==" + password);
         return new org.springframework.security.core.userdetails.User(userName, password,
-                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+                true,true,true,true,
+                AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
     }
 
     /**

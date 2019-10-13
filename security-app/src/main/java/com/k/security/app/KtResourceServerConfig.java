@@ -12,15 +12,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.social.security.SpringSocialConfigurer;
 
-import javax.sql.DataSource;
 
 /**
  * Created with IntelliJ IDEA.
@@ -49,6 +47,9 @@ public class KtResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private SpringSocialConfigurer ktSocialConfig;
 
+    @Autowired
+    private UserDetailsService usernameDetailService;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         BrowserProperties browserProperties = securityProperties.getBrowser();
@@ -59,30 +60,30 @@ public class KtResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.formLogin()
                 .loginPage("/authentication/required")
                 .loginProcessingUrl(loginProcessingUrl)
-                /**
-                 * 使用自定义登录成功处理器
-                 */
+                //使用自定义登录成功处理器
                 .successHandler(ktAuthenticationSuccessHandler)
-                /**
-                 * 使用自定义登录失败处理器
-                 */
+                //使用自定义登录失败处理器
                 .failureHandler(ktAuthenticationFailureHandler)
                 .and()
+                .userDetailsService(usernameDetailService)
                 .authorizeRequests()
-                .antMatchers("/authentication/required", loginPage, registerPage, signOutRedirectUrl,
-                        "/error", "/code/sms", "/code/image", "/authentication/mobile", "/user/register")
+                .antMatchers("/oauth/**", "/authentication/required", loginPage, registerPage, signOutRedirectUrl,
+                        "/error", "/code/sms", "/code/image",
+                        "/authentication/mobile", "/user/register")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .csrf().disable()
-               // .apply(smsCodeAuthenticationSecurityConfig)
-              //  .and()
+                // .apply(smsCodeAuthenticationSecurityConfig)
+                //  .and()
                 .apply(ktSocialConfig);
     }
+
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }
