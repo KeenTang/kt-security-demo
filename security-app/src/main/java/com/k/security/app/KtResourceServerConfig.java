@@ -28,62 +28,8 @@ import org.springframework.social.security.SpringSocialConfigurer;
  * Date: 2019-10-08
  * Time: 18:18
  */
-@Configuration
-@EnableResourceServer
-public class KtResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-    @Autowired
-    private SecurityProperties securityProperties;
+public class KtResourceServerConfig{
 
-    @Autowired
-    private KtAuthenticationSuccessHandler ktAuthenticationSuccessHandler;
-
-    @Autowired
-    private KtAuthenticationFailureHandler ktAuthenticationFailureHandler;
-
-    @Autowired
-    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
-
-    @Autowired
-    private SpringSocialConfigurer ktSocialConfig;
-
-    @Autowired
-    private UserDetailsService usernameDetailService;
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        BrowserProperties browserProperties = securityProperties.getBrowser();
-        String loginPage = browserProperties.getLoginPage();
-        String registerPage = browserProperties.getRegisterPage();
-        String signOutRedirectUrl = browserProperties.getSignOutRedirectUrl();
-        String loginProcessingUrl = browserProperties.getLoginProcessingUrl();
-        http.formLogin()
-                .loginPage("/authentication/required")
-                .loginProcessingUrl(loginProcessingUrl)
-                //使用自定义登录成功处理器
-                .successHandler(ktAuthenticationSuccessHandler)
-                //使用自定义登录失败处理器
-                .failureHandler(ktAuthenticationFailureHandler)
-                .and()
-                .userDetailsService(usernameDetailService)
-                .authorizeRequests()
-                .antMatchers("/oauth/**", "/authentication/required", loginPage, registerPage, signOutRedirectUrl,
-                        "/error", "/code/sms", "/code/image",
-                        "/authentication/mobile", "/user/register")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .csrf().disable()
-                // .apply(smsCodeAuthenticationSecurityConfig)
-                //  .and()
-                .apply(ktSocialConfig);
-    }
-
-
-    @Bean
-    public static PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
 }

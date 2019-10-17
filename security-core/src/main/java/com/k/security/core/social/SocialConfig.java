@@ -5,7 +5,9 @@ import com.k.security.core.social.qq.connect.KtJdbcUsersConnectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.ConnectionFactoryLocator;
@@ -60,4 +62,5 @@ public class SocialConfig extends SocialConfigurerAdapter {
         return new ProviderSignInUtils(connectionFactoryLocator,
                 getUsersConnectionRepository(connectionFactoryLocator));
     }
+
 }
